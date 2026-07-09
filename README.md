@@ -105,4 +105,4 @@ Machine-specific files (`workspace.json`, cache) are gitignored, so your local w
 
 ## License
 
-MIT — see [LICENSE](./LICENSE). Presentation materials by Tim Rayburn. The OKF specification and Karpathy's gist are the property of their respective authors.
+MIT for original work by Tim Rayburn — see [LICENSE](./LICENSE). Source articles, the OKF specification, Karpathy's gist, and the presentation deck are the property of their respective authors and are explicitly excluded from the MIT license. See the "Files Excluded from This License" section in LICENSE for the complete list.

@@ -19,3 +19,47 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+---
+
+## Files Excluded from This License
+
+The MIT License above applies only to the original work created by Tim
+Rayburn in this repository. The following files are the intellectual
+property of their respective authors and are NOT covered by this license.
+No claim is made about the licensing terms of these files — they are
+included here for educational and demonstration purposes only. Users are
+responsible for determining their own rights to use, copy, or redistribute
+these materials.
+
+### Source documents (raw-sources/)
+
+- `raw-sources/bcg-harvard-jagged-technological-frontier.pdf`
+  — Dell'Acqua, F., et al. "Navigating the Jagged Technological Frontier."
+    Harvard Business School / Boston Consulting Group.
+
+- `raw-sources/mit-cognitive-debt.pdf`
+  — Kosmyna, N., et al. "Your Brain on ChatGPT: Accumulation of Cognitive
+    Debt." MIT Media Lab.
+
+- `raw-sources/wharton-cognitive-surrender.pdf`
+  — Shaw, A., & Nave, G. "Thinking—Fast, Slow, and Artificial." Wharton
+    School, University of Pennsylvania.
+
+- `raw-sources/devlin-meter-picks-the-winners.md`
+  — Liles, D. "The Meter Picks the Winners." devlinliles.com.
+
+### Reference documents (repo root)
+
+- `OKF-SPEC.md`
+  — Open Knowledge Format (OKF) specification, Version 0.1.
+
+- `karpathy-llm-wiki-gist.md`
+  — Karpathy, A. "LLM Wiki." https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f
+
+### Presentation assets
+
+- `slides/Living-Context.pptx`
+  — Contains quotations, data points, and findings drawn from the source
+    documents above. Those elements remain the property of their respective
+    authors.
