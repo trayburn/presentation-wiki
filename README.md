@@ -75,6 +75,27 @@ This regenerates `Living-Context.pptx` with 7 slides covering the problem, the L
 - **Obsidian as the IDE** — Use graph view and backlinks to visualize your team's collective memory
 - **Hands-on** — Zero slideware. The ingestion pipeline, Obsidian graph, and local wiki queries run live
 
+## Getting Started for Participants
+
+```bash
+git clone https://github.com/trayburn/presentation-wiki.git
+```
+
+Then in Obsidian:
+
+1. **Open as vault**: Open Obsidian -> Open folder as vault -> select the `presentation-wiki` folder
+2. **Pre-configured**: The repo includes shared Obsidian settings (graph view colors, enabled core plugins, link behavior) so it works out of the box with no manual setup
+3. **Graph view**: Click the graph icon (or Ctrl+G / Cmd+G) — it starts empty because the wiki is blank
+4. **Start ingesting**: Follow the instructions in [AGENTS.md](./AGENTS.md) with your AI agent. Point it at `raw-sources/` and the ingest workflow. As the agent creates wiki pages, the graph view will populate in real time.
+
+No additional Obsidian plugins or configuration required. The `.obsidian/` folder in the repo handles:
+- Core plugins enabled (graph, backlinks, search, file explorer, properties)
+- Graph view color-coded by directory (sources = blue, entities = amber, concepts = purple)
+- Link format set to shortest-path wikilinks
+- Auto-update of links when files move
+
+Machine-specific files (`workspace.json`, cache) are gitignored, so your local window layout won't clutter commits.
+
 ## Talk Outline
 
 1. **Surviving the Daily Feed (5 min)** — The developer's daily flood of AI announcements
@@ -84,4 +105,4 @@ This regenerates `Living-Context.pptx` with 7 slides covering the problem, the L
 
 ## License
 
-Presentation materials by Tim Rayburn. The OKF specification and Karpathy's gist are the property of their respective authors.
+MIT — see [LICENSE](./LICENSE). Presentation materials by Tim Rayburn. The OKF specification and Karpathy's gist are the property of their respective authors.

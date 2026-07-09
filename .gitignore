@@ -1,0 +1,14 @@
+# Obsidian machine-specific files (keep the rest of .obsidian/ for shared config)
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/cache
+
+# OS noise
+.DS_Store
+.trash/
+Thumbs.db
+
+# Editor swap files
+*.swp
+*.swo
+*~

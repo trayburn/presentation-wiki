@@ -1,0 +1,45 @@
+{
+  "filter": "markdown",
+  "collapse-filter": false,
+  "search": "",
+  "showTags": true,
+  "showAttachments": false,
+  "hideUnresolved": true,
+  "showOrphans": true,
+  "collapse-color-groups": false,
+  "colorGroups": [
+    {
+      "query": "path:sources/",
+      "color": {
+        "a": 1,
+        "rgb": 5413432
+      }
+    },
+    {
+      "query": "path:entities/",
+      "color": {
+        "a": 1,
+        "rgb": 14725458
+      }
+    },
+    {
+      "query": "path:concepts/",
+      "color": {
+        "a": 1,
+        "rgb": 8388736
+      }
+    }
+  ],
+  "collapse-display": false,
+  "showArrow": true,
+  "textFadeMultiplier": 0,
+  "nodeSizeMultiplier": 1.2,
+  "lineSizeMultiplier": 1,
+  "collapse-forces": false,
+  "centerStrength": 0.5,
+  "repelStrength": 10,
+  "linkStrength": 0.8,
+  "linkDistance": 250,
+  "scale": 1,
+  "close": false
+}
