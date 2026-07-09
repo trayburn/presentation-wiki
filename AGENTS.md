@@ -1,6 +1,6 @@
 # Agent Operating Manual: OKF Knowledge Wiki
 
-This document is the complete operating manual for any AI agent working with the knowledge bundle in this repository. It is self-contained: an agent needs only standard file tools (read, write, edit, search) to perform all operations described here. No external CLI tools, no Obsidian, no wiki-tool, no database.
+This document is the complete operating manual for any AI agent working with the knowledge bundle in this repository. It is self-contained: an agent needs only standard file tools (read, write, edit, search) plus the Obsidian CLI (for link health, graph visualization, and search) to perform all operations described here. No wiki-tool, no database, no SDK.
 
 ---
 
@@ -172,7 +172,7 @@ This prevents duplicate pages, missed cross-references, and contradictions with 
 When a new source (article, paper, blog post, transcript) is provided, integrate it into the wiki:
 
 **Step 1 — Check for duplicates first.**
-Search existing pages for the topic using `search_files` across all `.md` files in `sample-wiki/`. If already ingested, inform the user and ask if supplementary information should be added.
+Search existing pages for the topic using `obsidian search query="topic keywords" path="sample-wiki"` or `search_files` across all `.md` files in `sample-wiki/`. If already ingested, inform the user and ask if supplementary information should be added.
 
 **Step 2 — Read the source.**
 Read the raw source material carefully. Extract key findings, entities mentioned, and concepts introduced.
@@ -209,6 +209,7 @@ For each common noun (technique, pattern, idea):
 Regenerate or manually update `sample-wiki/index.md`:
 - Add new pages under the correct section, alphabetically
 - Include the one-line `description` from each page's frontmatter
+- If Obsidian is available, use `obsidian search` to verify no pages were missed from the index
 
 **Step 9 — Log the operation.**
 Append to `sample-wiki/log.md`:
@@ -230,7 +231,7 @@ A single source can trigger updates across 5-15 wiki pages. This is normal and d
 When the user asks a question that requires synthesizing wiki knowledge:
 
 1. **Read `sample-wiki/index.md`** to identify relevant pages.
-2. For larger wikis (50+ pages), also `search_files` across all `.md` files for key terms.
+2. For larger wikis (50+ pages), also search using `obsidian search query="key terms" path="sample-wiki"` or `search_files` across all `.md` files.
 3. **Read the relevant pages.**
 4. **Synthesize an answer** with citations using standard markdown links: "Based on [BCG Study](/sources/bcg-harvard-study.md) and [MIT Study](/sources/mit-cognitive-debt.md)..."
 5. **File valuable answers back** — if the answer is a substantial comparison, deep dive, or novel synthesis, create a page in `sample-wiki/queries/[descriptive-slug].md`. Don't file trivial lookups.
@@ -240,14 +241,14 @@ When the user asks a question that requires synthesizing wiki knowledge:
 
 When the user asks to health-check or audit the wiki:
 
-Use `search_files` and `read_file` to perform all checks. No external tools needed.
+Prefer the Obsidian CLI for link and structure checks — it uses Obsidian's own resolver and is authoritative. Fall back to file scanning (`search_files`, `read_file`) when Obsidian is unavailable.
 
 **Checks (by priority):**
 
-1. **Broken links:** Find all markdown links `[text](/path.md)` and verify each target file exists. Use `search_files` to extract all link targets, then check each one.
-2. **Missing frontmatter:** Verify every `.md` file (except `index.md` and `log.md`) starts with `---` and contains a `type:` field.
-3. **Orphan pages:** Find pages that no other page links to. Build an inbound link map by scanning all files for links.
-4. **Dead-end pages:** Find pages with fewer than 2 outbound links.
+1. **Broken links:** `obsidian unresolved verbose` — broken links across the wiki. Fall back to scanning all markdown link targets with `search_files` and verifying each exists.
+2. **Missing frontmatter:** Verify every `.md` file (except `index.md` and `log.md`) starts with `---` and contains a `type:` field. Use `read_file` or `obsidian properties`.
+3. **Orphan pages:** `obsidian orphans` — pages with no incoming links. Fall back to building an inbound link map by scanning all files.
+4. **Dead-end pages:** `obsidian deadends` — pages with no outgoing links. Fall back to scanning for pages with fewer than 2 outbound links.
 5. **Index completeness:** Every wiki page should appear in `index.md`. Compare the filesystem against index entries.
 6. **Contradictions:** Pages on the same topic with conflicting claims. Look for pages that share tags/entities but state different facts.
 7. **Stale content:** Pages whose `timestamp` is much older than other pages covering the same entities.
@@ -345,11 +346,87 @@ To ingest a new source right now:
 
 1. Read the source material
 2. Follow the Ingest workflow (section 4.2) step by step
-3. Use only file tools — `read_file`, `write_file`, `patch`, `search_files`
+3. Use file tools (`read_file`, `write_file`, `patch`, `search_files`) and Obsidian CLI where available
 4. Update `index.md` and `log.md` when done
 5. Report every file created or updated
 
 The wiki grows richer with every source. The maintenance cost is near zero because the agent handles the bookkeeping that humans abandon.
+
+---
+
+## 9. Tools
+
+### File Tools (always available)
+
+These are the baseline tools for reading, writing, and searching the wiki. They work everywhere with no dependencies.
+
+- **read_file** — Read any wiki page, source file, or index
+- **write_file** — Create new wiki pages
+- **patch** — Edit existing wiki pages (targeted find-and-replace)
+- **search_files** — Search content across files (regex) or find files by name (glob)
+
+### Obsidian CLI (recommended when available)
+
+Obsidian is the visualization layer for this wiki — graph view, backlinks, and the IDE experience described in the talk. The Obsidian CLI provides agent-accessible commands that use Obsidian's own link resolver, making them authoritative for link health checks.
+
+If Obsidian is installed, prefer it for the operations below. If it is not available, the file-tool equivalents listed alongside each command work as fallbacks.
+
+**Search:**
+```bash
+# Search wiki content with full Obsidian query syntax
+obsidian search query="cognitive debt" path="sample-wiki"
+obsidian search:context query="token economics" path="sample-wiki"
+```
+
+**Link health (authoritative — uses Obsidian's own resolver):**
+```bash
+obsidian unresolved verbose          # broken links across the wiki
+obsidian orphans                     # pages with no incoming links
+obsidian deadends                    # pages with no outgoing links
+```
+
+**Backlinks — see what links to a given page:**
+```bash
+obsidian backlinks file="bcg-harvard-study" counts
+```
+
+**Properties / frontmatter:**
+```bash
+obsidian properties path="sample-wiki/sources/bcg-harvard-study.md"
+obsidian property:read name=tags file="bcg-harvard-study"
+obsidian property:set name=timestamp value="2026-07-09T12:00:00Z" file="bcg-harvard-study"
+```
+
+**Tags across the wiki:**
+```bash
+obsidian tags folder="sample-wiki" counts sort=count
+```
+
+**Open a wiki page in Obsidian UI for live review:**
+```bash
+obsidian open path="sample-wiki/sources/bcg-harvard-study.md"
+```
+
+**Graph view:** The primary reason to use Obsidian with this wiki. Opening the `sample-wiki/` directory as an Obsidian vault gives you:
+- **Graph View** — visualizes the knowledge network, showing what connects to what, which pages are hubs, which are orphans
+- **Backlinks** — every page shows what links to it, bidirectional navigation
+- **YAML frontmatter** — powers Dataview queries for dynamic tables and lists
+
+This is the "Obsidian as the IDE" experience from the talk: the agent writes markdown; Obsidian renders the graph and connections in real time.
+
+### Tool Selection Guide
+
+| Task | Best Tool |
+|------|-----------|
+| Find broken links | `obsidian unresolved` (authoritative) |
+| Find orphaned pages | `obsidian orphans` |
+| Find isolated pages | `obsidian deadends` |
+| Check what links to a page | `obsidian backlinks` |
+| Search wiki content | `obsidian search` or `search_files` |
+| Read a page | `read_file` |
+| Create/edit a page | `write_file` / `patch` |
+| Set frontmatter | `obsidian property:set` or `patch` |
+| Visualize the graph | Open `sample-wiki/` in Obsidian |
 
 ---
 
