@@ -16,23 +16,26 @@ The wiki is a **persistent, compounding artifact.** Every new source makes it ri
 
 ```
 repository root/
-├── sample-wiki/              # THE WIKI (agent-owned markdown)
-│   ├── index.md              # Content catalog — one-line summaries per page
-│   ├── log.md                # Chronological action log (append-only)
-│   └── sources/              # Source summaries (1:1 with raw sources)
-│       ├── bcg-harvard-study.md
-│       ├── mit-cognitive-debt.md
-│       ├── wharton-cognitive-surrender.md
-│       └── devlin-meter-picks-winners.md
-├── OKF-SPEC.md               # Full OKF specification (reference)
-├── karpathy-llm-wiki-gist.md # Original Karpathy wiki pattern (reference)
-├── AGENTS.md                 # This file — the schema and operating manual
-└── Abstract.md               # Talk abstract and outline
+├── raw-sources/                # Layer 1: IMMUTABLE raw source documents
+│   ├── bcg-harvard-jagged-technological-frontier.pdf
+│   ├── mit-cognitive-debt.pdf
+│   ├── wharton-cognitive-surrender.pdf
+│   └── devlin-meter-picks-the-winners.md
+├── sample-wiki/                # Layer 2: THE WIKI (agent-owned markdown)
+│   ├── index.md                # Content catalog — one-line summaries per page
+│   ├── log.md                  # Chronological action log (append-only)
+│   ├── sources/                # Source summaries (created during ingest)
+│   ├── entities/               # Entity pages (created during ingest)
+│   └── concepts/               # Concept pages (created during ingest)
+├── OKF-SPEC.md                 # Full OKF specification (reference)
+├── karpathy-llm-wiki-gist.md   # Original Karpathy wiki pattern (reference)
+├── AGENTS.md                   # This file — the schema and operating manual
+└── Abstract.md                 # Talk abstract and outline
 ```
 
-**Layer 1 — Raw Sources:** Immutable source documents (PDFs, articles, transcripts). The agent reads from them but never modifies them. In this demo repo, raw sources are referenced via the `resource:` URI in frontmatter rather than stored locally.
+**Layer 1 — Raw Sources:** Immutable source documents in `raw-sources/`. The agent reads from them but never modifies them. These are the inputs for the ingest workflow.
 
-**Layer 2 — The Wiki:** Agent-owned markdown files inside `sample-wiki/`. The agent creates, updates, and maintains these entirely. The human reads them; the agent writes them.
+**Layer 2 — The Wiki:** Agent-owned markdown files inside `sample-wiki/`. The agent creates, updates, and maintains these entirely. The human reads them; the agent writes them. The wiki starts blank and grows as sources are ingested.
 
 **Layer 3 — This File (AGENTS.md):** The schema. It defines structure, conventions, and workflows. This is what makes the agent a disciplined wiki maintainer rather than a generic chatbot.
 
@@ -175,7 +178,7 @@ When a new source (article, paper, blog post, transcript) is provided, integrate
 Search existing pages for the topic using `obsidian search query="topic keywords" path="sample-wiki"` or `search_files` across all `.md` files in `sample-wiki/`. If already ingested, inform the user and ask if supplementary information should be added.
 
 **Step 2 — Read the source.**
-Read the raw source material carefully. Extract key findings, entities mentioned, and concepts introduced.
+Read the raw source material carefully. Raw sources live in `raw-sources/` relative to the repository root. Extract key findings, entities mentioned, and concepts introduced.
 
 **Step 3 — Discuss takeaways with the user** (skip in automated contexts).
 Summarize what you found. Ask which entities and concepts to extract. Get confirmation before creating pages.
